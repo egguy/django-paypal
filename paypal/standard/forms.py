@@ -96,6 +96,8 @@ class PayPalPaymentsForm(forms.Form):
         self.button_type = button_type
 
     def render(self):
+        if TEST:
+            return self.sandbox()
         return mark_safe(u"""<form action="%s" method="post">
     %s
     <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
