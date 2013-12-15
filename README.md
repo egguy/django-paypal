@@ -81,9 +81,11 @@ Using PayPal Payments Standard IPN:
     transaction. Connect the signals to actions to perform the needed operations
     when a successful payment is recieved.
     
-    There are two signals for basic transactions:
+    There are four signals for basic transactions:
     - `payment_was_successful` 
     - `payment_was_flagged`
+    - `payment_was_refunded`
+    - `payment_was_reversed`
     
     And four signals for subscriptions:
     - `subscription_cancel` - Sent when a subscription is cancelled.
@@ -258,7 +260,7 @@ Using PayPal Payments Pro (WPP)
 
 WPP is the more awesome version of PayPal that lets you accept payments on your 
 site. WPP reuses code from `paypal.standard` so you'll need to include both 
-apps. [There is an explanation of WPP in the PayPal Forums](http://www.pdncommunity.com/pdn/board/message?board.id=wppro&thread.id=192).
+apps.
 
 1. Obtain PayPal Pro API credentials: login to PayPal, click *My Account*,
   *Profile*, *Request API credentials*, *Set up PayPal API credentials and
@@ -302,21 +304,21 @@ apps. [There is an explanation of WPP in the PayPal Forums](http://www.pdncommun
    populated with the context variable `form` which contains either a 
    `PaymentForm` or a `Confirmation` form.
 
-    <!-- payment.html -->
-    <h1>Show me the money</h1>
-    <form method="post" action="">
-      {{ form }}
-      <input type="submit" value="Pay Up">
-    </form>
-    
-    <!-- confirmation.html -->
-    <h1>Are you sure you want to buy this thing?</h1>
-    <form method="post" action="">
-      {{ form }}
-      <input type="submit" value="Yes I Yams">
-    </form>
+        <!-- payment.html -->
+        <h1>Show me the money</h1>
+        <form method="post" action="">
+          {{ form }}
+          <input type="submit" value="Pay Up">
+        </form>
+        
+        <!-- confirmation.html -->
+        <h1>Are you sure you want to buy this thing?</h1>
+        <form method="post" action="">
+          {{ form }}
+          <input type="submit" value="Yes I Yams">
+        </form>
 
-5. Add your view to `urls.py`, and add the IPN endpoint to receive callbacks 
+6. Add your view to `urls.py`, and add the IPN endpoint to receive callbacks 
    from PayPal:
 
         # urls.py
@@ -327,7 +329,12 @@ apps. [There is an explanation of WPP in the PayPal Forums](http://www.pdncommun
             (r'^some/obscure/name/', include('paypal.standard.ipn.urls')),
         )
 
-1. Profit.
+7. Connect to the provided signals and have them do something useful:
+    - `payment_was_successful` 
+    - `payment_was_flagged`
+
+
+8. Profit.
 
 
 Links:
